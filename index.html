@@ -17,37 +17,44 @@
           <button id="start-button" type="button" class="btn btn-primary">Start game</button>
           <button id="new-game-button" type="button" class="btn btn-success">New game</button>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
           <h4>Points: <span id="score">0</span></h4>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
           <h4>Time left: <span id="timer">60</span></h4>
         </div>
-        <div class="col-lg-3">
-          <p>Press "Start game" to start the game and counter</p>
-          <p>Click on the green blocks to make them disappear and get points</p>
-          <p>Your goal is to score the most points in 1 minute</p>
-          <p>Press "New game" to reset your score and counter</p>
+        <div class="col-lg-5">
+          <ul>
+            <li><b>Rules:</b></li>
+            <li>Press "Start game" to start the game and counter</li>
+            <li>Click on the blocks to make them disappear and get points</li>
+            <li>Each color gives you different number of points: green - 1, red - 2, blue - 3, and purple - 4</li>
+            <li>Orange blocks add 1 second to the timer</li>
+            <li>Your goal is to score the most points in 1 minute</li>
+            <li>Press "New game" to reset your score and counter</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-  <div id="container">
-    <div id="game-field">
-    </div>
-    <div id="results-table">
-      <h2>Result table</h2>
-      <table class="table table-bordered">
-        <thead class="thead-dark">
-          <tr>
-            <th>Name</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-        </tbody>
-      </table>
-      <button id="reset-table-button" type="button" class="btn btn-danger">Reset results</button>
+  <div class="container-fluid">
+    <div id="game-container" class="row">
+      <div id="game-field" class="col-sm-10">
+      </div>
+      <div id="results-table" class="col-sm-2">
+        <h2>Result table</h2>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+          </tbody>
+        </table>
+        <button id="reset-table-button" type="button" class="btn btn-danger">Reset results</button>
+      </div>
     </div>
   </div>
 
