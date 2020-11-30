@@ -1,4 +1,4 @@
-const grid = Array(288);
+const grid = Array(290);
 
 //Select DOM elements
 const gameField = document.getElementById('game-field');
@@ -16,24 +16,24 @@ let isGameOver = true;
 let score = 0;
 let time = 60;
 let squares = [];
+let filledSquaresCounter = 0;
+const colorClasses = ['green-square', 'red-square', 'blue-square', 'purple-square', 'orange-square'];
 
 //Read results from local storage 
-let results = JSON.parse(localStorage.getItem('game-results')) || {};
+let results = JSON.parse(localStorage.getItem('remove-the-blocks-game-results')) || [];
 
 window.addEventListener('load', fillResultsTable);
 
 function fillResultsTable() {
-  if (localStorage.getItem('game-results')) {
-    for (let prop in results) {
-      tableContent.innerHTML += `<tr><td>${prop}</td><td>${results[prop]}</td></tr>`
-    }
+  if (localStorage.getItem('remove-the-blocks-game-results')) {
+    results.forEach(result => tableContent.innerHTML += `<tr><td>${result.name}</td><td>${result.score}</td></tr>`);
   } else {
     return;
   }
 }
 
 resetButton.addEventListener('click', () => {
-  localStorage.removeItem('game-results');
+  localStorage.removeItem('remove-the-blocks-game-results');
   tableContent.innerHTML = '';
 })
 
@@ -55,21 +55,38 @@ function fillGrid() {
 
 function createSquare() {
   const randomIndex = Math.floor(Math.random() * grid.length);
-  squares[randomIndex].classList.add('filled-square');
+  const randomColor = Math.floor(Math.random() * colorClasses.length);
+  if (squares[randomIndex].classList.contains('filled-square')) {
+    createSquare();
+    return;
+  }
+  squares[randomIndex].classList.add('filled-square', colorClasses[randomColor]);
+  filledSquaresCounter++;
 }
 
 function createRandomSquares() {
-  const squaresNumber = Math.ceil(Math.random() * 2);
+  const squaresNumber = Math.round(Math.random() * 2);
   for (let i = 0; i < squaresNumber; i++) {
     createSquare();
+  }
+  if (filledSquaresCounter <= 2) {
+    fillGrid();
   }
 }
 
 gameField.addEventListener('click', (e) => {
   if (e.target.classList.contains('filled-square') && !isGameOver) {
-    e.target.classList.remove('filled-square');
-    score++;
-    scoreElement.innerText = score;
+    const color = e.target.classList[2];
+    e.target.classList = 'square';
+    if (color == 'orange-square') {
+      clearInterval(gameTimerId);
+      time += 2;
+      handleTimer();
+    } else {
+      score += colorClasses.indexOf(color) + 1;
+      scoreElement.innerText = score;
+    }
+    filledSquaresCounter--;
     createRandomSquares();
   };
 });
@@ -103,6 +120,7 @@ function handleTimer() {
 newGameButton.addEventListener('click', resetGame);
 
 function resetGame() {
+  isGameOver = true;
   score = 0;
   scoreElement.innerText = score;
   time = 60;
@@ -114,7 +132,7 @@ function resetGame() {
 }
 
 function clearGrid() {
-  squares.forEach(square => square.classList.remove('filled-square'));
+  squares.forEach(square => square.classList = 'square');
 }
 
 //Show modal and save results
@@ -129,8 +147,9 @@ function saveResults() {
   const name = nameInput.value || 'Anonymous';
   const tableRow = `<tr><td>${name}</td><td>${score}</td></tr>`;
   tableContent.innerHTML += tableRow;
+  results.push({name, score});
   results[name] = score;
-  localStorage.setItem('game-results', JSON.stringify(results));
+  localStorage.setItem('remove-the-blocks-game-results', JSON.stringify(results));
 }
 
 createGrid();
