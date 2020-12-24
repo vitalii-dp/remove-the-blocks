@@ -145,11 +145,11 @@ saveButton.addEventListener('click', saveResults);
 
 function saveResults() {
   const name = nameInput.value || 'Anonymous';
-  const tableRow = `<tr><td>${name}</td><td>${score}</td></tr>`;
-  tableContent.innerHTML += tableRow;
   results.push({name, score});
-  results[name] = score;
-  localStorage.setItem('remove-the-blocks-game-results', JSON.stringify(results));
+  const sortedResults = results.sort((a, b) => b.score - a.score);
+  tableContent.innerHTML = '';
+  sortedResults.forEach(result => tableContent.innerHTML += `<tr><td>${result.name}</td><td>${result.score}</td></tr>`);
+  localStorage.setItem('remove-the-blocks-game-results', JSON.stringify(sortedResults));
 }
 
 createGrid();
